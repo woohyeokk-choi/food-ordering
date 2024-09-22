@@ -1,4 +1,6 @@
-const products = [
+import { type Product } from "@/src/types";
+
+const products : Array<Product> = [
   {
     id: 1,
     name: 'Ultimate Pepperoni',
