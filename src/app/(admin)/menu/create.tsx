@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, TextInput, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, Alert } from "react-native";
 import React from "react";
 import Button from "@/components/Button";
 import { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 const CreateProductScreen = () => {
   const [name, setName] = useState("");
@@ -12,6 +12,9 @@ const CreateProductScreen = () => {
 
   const [error, setError] = useState("");
   const [image, setImage] = useState("");
+
+  const { id } = useLocalSearchParams();
+  const isUpdating = !!id;
 
   const resetFields = () => {
     setName("");
@@ -53,6 +56,14 @@ const CreateProductScreen = () => {
     return true;
   };
 
+  const onSubmit = () => {
+    if (isUpdating) {
+      onUpdateCreate();
+    } else {
+      onCreate();
+    }
+  };
+
   const onCreate = () => {
     if (!validateInput()) return;
     console.warn("Creating product");
@@ -60,9 +71,39 @@ const CreateProductScreen = () => {
     resetFields();
   };
 
+  const onUpdateCreate = () => {
+    if (!validateInput()) return;
+    console.warn("Updating product");
+
+    resetFields();
+  };
+
+  const onDelete = () => {};
+
+  const confirmDelete = () => {
+    Alert.alert(
+      "Delete Product",
+      "Are you sure you want to delete this product?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: onDelete,
+          style: "destructive",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: "Create Product" }} />
+      <Stack.Screen
+        options={{ title: isUpdating ? "Update Product" : "Create Product" }}
+      />
       <Image
         source={{
           uri:
@@ -80,6 +121,7 @@ const CreateProductScreen = () => {
         onChangeText={setName}
         placeholder="New Pizza"
         style={styles.input}
+        placeholderTextColor="gray"
       />
       <Text style={styles.label}>Price ($) </Text>
       <TextInput
@@ -88,9 +130,15 @@ const CreateProductScreen = () => {
         placeholder="9.99"
         style={styles.input}
         keyboardType="numeric"
+        placeholderTextColor="gray"
       />
       <Text style={{ color: "red" }}>{error}</Text>
-      <Button onPress={onCreate} text="Create" />
+      <Button onPress={onSubmit} text={isUpdating ? "Update" : "Create"} />
+      {isUpdating && (
+        <Text onPress={confirmDelete} style={styles.textbutton}>
+          Delete
+        </Text>
+      )}
     </View>
   );
 };
@@ -107,7 +155,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginTop: 5,
     marginBottom: 10,
-    placeholderTextColor: "gray",
   },
   label: {
     fontSize: 16,
