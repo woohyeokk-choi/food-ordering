@@ -51,7 +51,7 @@ const ProductDetails = () => {
             style={[
               styles.size,
               {
-                backgroundColor: selectedSize === size ? "gainsboro" : "White",
+                backgroundColor: selectedSize === size ? "gainsboro" : "white",
               },
             ]}
           >

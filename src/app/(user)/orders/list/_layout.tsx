@@ -7,7 +7,6 @@ export const TopTabs = withLayoutContext(
 );
 
 export default function OrderListNavigator() {
-  console.log("hi");
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }} edges={["top"]}>
       <TopTabs>
