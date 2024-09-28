@@ -1,8 +1,27 @@
-import { Redirect } from "expo-router";
-import React from "react";
-import { useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, FlatList, Text } from "react-native";
+import ProductListItem from "@/components/ProductListItem";
+import { useProductList } from "@/src/api/products";
 
 const HomeScreen = () => {
-  const { id } = useLocalSearchParams();
-  return <Redirect href={`./menu/${id}`} />;
+  const { data: products, error, isLoading } = useProductList();
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error) {
+    return <Text>Failed to fetch products</Text>;
+  }
+
+  return (
+    <FlatList
+      data={products}
+      renderItem={({ item }) => <ProductListItem product={item} />}
+      numColumns={2}
+      contentContainerStyle={{ gap: 10, padding: 10 }}
+      columnWrapperStyle={{ gap: 10 }}
+    />
+  );
 };
+
+export default HomeScreen;
