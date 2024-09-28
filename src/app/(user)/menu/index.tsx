@@ -1,12 +1,25 @@
 import { Redirect } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { FlatList } from "react-native";
 import ProductListItem from "@/components/ProductListItem";
 import products from "@/assets/data/products";
+import { supabase } from "@/src/lib/supabase";
 
 const HomeScreen = () => {
-  const { id } = useLocalSearchParams();
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase.from("products").select("*");
+      if (error) {
+        console.log("Error fetching products", error);
+      }
+      setProducts(data);
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <FlatList
       data={products}

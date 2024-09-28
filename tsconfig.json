@@ -11,6 +11,7 @@
       "@/utils/*": ["src/utils/*"],
       "@/assets/*": ["assets/*"],
       "@/*": ["./*"],
+      "@/lib/*": ["src/lib/*"],
     },
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
