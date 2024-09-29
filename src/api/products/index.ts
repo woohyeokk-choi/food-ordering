@@ -86,3 +86,26 @@ export const useUpdateProduct = () => {
     },
   });
 };
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    async mutationFn(data: any) {
+      const { error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", data.id);
+
+      if (error) {
+        console.error("Error deleting product:", error); // Debugging line
+        throw new Error(error.message);
+      }
+      return;
+    },
+    async onSuccess(_, { id }) {
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
+      await queryClient.invalidateQueries({ queryKey: ["product", id] });
+    },
+  });
+};
