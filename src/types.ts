@@ -1,3 +1,5 @@
+import { Database } from "./database.types";
+
 interface Product {
   id: number;
   name: string;
@@ -61,3 +63,7 @@ export type {
 };
 
 export { OrderStatusList };
+export type Tables<T extends keyof Database["public"]["Tables"]> =
+  Database["public"]["Tables"][T]["Row"];
+export type Enums<T extends keyof Database["public"]["Enums"]> =
+  Database["public"]["Enums"][T];

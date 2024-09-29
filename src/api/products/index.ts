@@ -10,7 +10,7 @@ export const useProductList = () => {
       if (error) {
         throw new Error(error.message);
       }
-      return data;
+      return data as Product[];
     },
   });
 };
@@ -26,7 +26,7 @@ export const useProduct = (id: number) => {
       if (error) {
         throw new Error(error.message);
       }
-      return data[0];
+      return data[0] as Product;
     },
   });
 };
@@ -42,12 +42,13 @@ export const useInsertProduct = () => {
           name: data.name,
           image: data.image,
           price: data.price,
-        });
+        })
+        .select();
 
       if (error) {
         throw new Error(error.message);
       }
-      return newProduct;
+      return newProduct[0] as Product;
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["products"] });
@@ -78,7 +79,7 @@ export const useUpdateProduct = () => {
       if (!updatedProduct || updatedProduct.length !== 1) {
         throw new Error("Product not found or multiple products returned");
       }
-      return updatedProduct[0];
+      return updatedProduct[0] as Product;
     },
     async onSuccess(_, { id }) {
       await queryClient.invalidateQueries({ queryKey: ["products"] });

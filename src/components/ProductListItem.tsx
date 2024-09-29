@@ -1,11 +1,15 @@
 import { Text, Image, StyleSheet, Pressable } from "react-native";
-import { type Product } from "../types";
+import { type Product, Tables } from "../types";
 import { type Href, Link, useSegments } from "expo-router";
 
 export const defaultPizzaImage =
   "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
 
-const ProductListItem = ({ product }: { product: Product }) => {
+type ProductListItemProps = {
+  product: Tables<"products">;
+};
+
+const ProductListItem = ({ product }: ProductListItemProps) => {
   const segments = useSegments();
   const segment = `${segments[0]}/menu/${product.id}` as Href;
 
