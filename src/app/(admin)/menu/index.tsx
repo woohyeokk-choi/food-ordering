@@ -1,8 +1,8 @@
 import { ActivityIndicator, FlatList, Text } from "react-native";
-import ProductListItem from "@/components/ProductListItem";
-import { useProductList } from "@/src/api/products";
+import ProductListItem from "../../../components/ProductListItem";
+import { useProductList } from "../../../api/products";
 
-const HomeScreen = () => {
+export default function MenuScreen() {
   const { data: products, error, isLoading } = useProductList();
 
   if (isLoading) {
@@ -22,6 +22,4 @@ const HomeScreen = () => {
       columnWrapperStyle={{ gap: 10 }}
     />
   );
-};
-
-export default HomeScreen;
+}

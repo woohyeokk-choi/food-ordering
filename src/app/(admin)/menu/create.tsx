@@ -1,10 +1,15 @@
 import { View, Text, StyleSheet, TextInput, Image, Alert } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@/components/Button";
 import { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import * as ImagePicker from "expo-image-picker";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  useInsertProduct,
+  useProduct,
+  useUpdateProduct,
+} from "@/src/api/products";
 
 const CreateProductScreen = () => {
   const [name, setName] = useState("");
@@ -13,8 +18,23 @@ const CreateProductScreen = () => {
   const [error, setError] = useState("");
   const [image, setImage] = useState("");
 
-  const { id } = useLocalSearchParams();
+  const { id: idString } = useLocalSearchParams();
+  const id = parseFloat(typeof idString === "string" ? idString : idString[0]);
   const isUpdating = !!id;
+
+  const { mutate: insertProduct } = useInsertProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
+  const { data: updatingProduct } = useProduct(id);
+
+  useEffect(() => {
+    if (updatingProduct) {
+      setName(updatingProduct.name);
+      setPrice(updatingProduct.price.toString());
+      setImage(updatingProduct.image || "");
+    }
+  }, [updatingProduct]);
+
+  const router = useRouter();
 
   const resetFields = () => {
     setName("");
@@ -58,7 +78,7 @@ const CreateProductScreen = () => {
 
   const onSubmit = () => {
     if (isUpdating) {
-      onUpdateCreate();
+      onUpdate();
     } else {
       onCreate();
     }
@@ -66,16 +86,44 @@ const CreateProductScreen = () => {
 
   const onCreate = () => {
     if (!validateInput()) return;
-    console.warn("Creating product");
+
+    insertProduct(
+      {
+        name,
+        price: parseFloat(price),
+        image: image,
+      },
+      {
+        onSuccess: () => {
+          resetFields();
+          router.back();
+        },
+        onError: (error) => {
+          Alert.alert("Error", error.message);
+        },
+      }
+    );
 
     resetFields();
   };
 
-  const onUpdateCreate = () => {
-    if (!validateInput()) return;
-    console.warn("Updating product");
+  const onUpdate = async () => {
+    if (!validateInput()) {
+      return;
+    }
 
-    resetFields();
+    updateProduct(
+      { id, name, price: parseFloat(price), image },
+      {
+        onSuccess: () => {
+          resetFields();
+          router.back();
+        },
+        onError: (error) => {
+          Alert.alert("Error", error.message);
+        },
+      }
+    );
   };
 
   const onDelete = () => {};

@@ -1,27 +1,30 @@
-import { Redirect, Tabs } from "expo-router";
-import React from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Link, Redirect, Tabs } from "expo-router";
 
-import { TabBarIcon } from "../../components/navigation/TabBarIcon";
 import { Colors } from "../../constants/Colors";
-import { useColorScheme } from "../../../hooks/useColorScheme";
 import { useAuth } from "../providers/AuthProvider";
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+function TabBarIcon(props: {
+  name: React.ComponentProps<typeof FontAwesome>["name"];
+  color: string;
+}) {
+  return <FontAwesome size={20} style={{ marginBottom: -3 }} {...props} />;
+}
 
+export default function TabLayout() {
   const { isAdmin } = useAuth();
 
   if (!isAdmin) {
-    return <Redirect href="/" />;
+    return <Redirect href={"/"} />;
   }
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].background,
-        tabBarInactiveBackgroundColor: "gainsboro",
+        tabBarActiveTintColor: Colors.light.background,
+        tabBarInactiveTintColor: "gainsboro",
         tabBarStyle: {
-          backgroundColor: Colors[colorScheme ?? "light"].tint,
+          backgroundColor: Colors.light.tint,
         },
       }}
     >
@@ -33,7 +36,7 @@ export default function TabLayout() {
           title: "Menu",
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="restaurant" color={color} />
+            <TabBarIcon name="cutlery" color={color} />
           ),
         }}
       />
