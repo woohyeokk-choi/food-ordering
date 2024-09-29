@@ -13,7 +13,10 @@ const CartContext = createContext<CartType>({
 const CartProvider = ({ children }: PropsWithChildren) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  const addItem = (product: Tables<"products">, size: CartItem["size"]) => {
+  const addItem = (
+    product: Tables<"products">,
+    size: CartItem["size"]
+  ): void => {
     const existingItem = items.find(
       (item) => item.product_id === product.id && item.size === size
     );
@@ -24,7 +27,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
 
     const newCartItem: CartItem = {
       id: randomUUID(),
-      product,
+      product: product as Tables<"products">,
       product_id: product.id,
       size,
       quantity: 1,
@@ -48,7 +51,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
   };
 
   const totalPrice = items.reduce(
-    (acc, item) => (acc += item.product.price * item.quantity),
+    (acc, item) => (acc += item.product.price || 0 * item.quantity),
     0
   );
 

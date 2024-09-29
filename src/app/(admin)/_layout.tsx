@@ -1,17 +1,13 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Redirect, Tabs } from "expo-router";
 
 import { Colors } from "../../constants/Colors";
 import { useAuth } from "../providers/AuthProvider";
-
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={20} style={{ marginBottom: -3 }} {...props} />;
-}
+import { useColorScheme } from "../../../hooks/useColorScheme";
+import React from "react";
+import { TabBarIcon } from "../../components/navigation/TabBarIcon";
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme();
   const { isAdmin } = useAuth();
 
   if (!isAdmin) {
@@ -21,10 +17,10 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.light.background,
-        tabBarInactiveTintColor: "gainsboro",
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].background,
+        tabBarInactiveBackgroundColor: "gainsboro",
         tabBarStyle: {
-          backgroundColor: Colors.light.tint,
+          backgroundColor: Colors[colorScheme ?? "light"].tint,
         },
       }}
     >
@@ -36,7 +32,7 @@ export default function TabLayout() {
           title: "Menu",
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="cutlery" color={color} />
+            <TabBarIcon name="restaurant" color={color} />
           ),
         }}
       />

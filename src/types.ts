@@ -11,7 +11,7 @@ type PizzaSize = "S" | "M" | "L" | "XL";
 
 type CartItem = {
   id: string;
-  product: Product;
+  product: Tables<"products">;
   product_id: number;
   size: PizzaSize;
   quantity: number;
@@ -19,7 +19,7 @@ type CartItem = {
 
 type CartType = {
   items: CartItem[];
-  addItem: (product: Product, size: PizzaSize) => void;
+  addItem: (product: Tables<"products">, size: PizzaSize) => void;
   updateQuantity: (itemId: string, amount: -1 | 1) => void;
   totalPrice: number;
 };

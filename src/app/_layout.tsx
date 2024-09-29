@@ -12,7 +12,6 @@ import CartProvider from "./providers/CartProvider";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import AuthProvider from "./providers/AuthProvider";
-import { Query } from "@tanstack/react-query";
 import QueryProvider from "./providers/QueryProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
