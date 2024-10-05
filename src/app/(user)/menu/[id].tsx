@@ -12,9 +12,10 @@ import { Stack } from "expo-router";
 import { useState } from "react";
 import Button from "@/components/Button";
 import { useCart } from "../../providers/CartProvider";
-import { PizzaSize } from "@/src/types";
+import { PizzaSize, Tables } from "@/src/types";
 import { useRouter } from "expo-router";
 import { useProduct } from "@/src/api/products";
+import RemoteImage from "@/components/RemoteImage";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
@@ -39,7 +40,7 @@ const ProductDetails = () => {
 
   const addToCart = () => {
     if (!product) return;
-    addItem(product, selectedSize);
+    addItem(product as Tables<"products">, selectedSize);
     router.push("/cart");
   };
 
@@ -49,13 +50,12 @@ const ProductDetails = () => {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: product.name }} />
-      <Image
-        source={{
-          uri:
-            product.image ??
-            "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png",
-        }}
+      <Stack.Screen options={{ title: product.name || "Pizza" }} />
+      <RemoteImage
+        path={product?.image}
+        fallback={
+          "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png"
+        }
         style={styles.image}
       />
       <Text>Select Size</Text>

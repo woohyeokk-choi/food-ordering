@@ -83,7 +83,7 @@ export const useUpdateProduct = () => {
     },
     async onSuccess(_, { id }) {
       await queryClient.invalidateQueries({ queryKey: ["products"] });
-      await queryClient.invalidateQueries({ queryKey: ["product", id] });
+      await queryClient.invalidateQueries({ queryKey: ["products", id] });
     },
   });
 };
@@ -106,7 +106,7 @@ export const useDeleteProduct = () => {
     },
     async onSuccess(_, { id }) {
       await queryClient.invalidateQueries({ queryKey: ["products"] });
-      await queryClient.invalidateQueries({ queryKey: ["product", id] });
+      await queryClient.invalidateQueries({ queryKey: ["products", id] });
     },
   });
 };

@@ -12,6 +12,7 @@ import { PizzaSize } from "../../../types";
 import { FontAwesome } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { useProduct } from "../../../api/products";
+import RemoteImage from "@/components/RemoteImage";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
@@ -52,8 +53,11 @@ const ProductDetailsScreen = () => {
 
       <Stack.Screen options={{ title: product?.name || "Product" }} />
 
-      <Image
-        source={{ uri: product?.image || defaultPizzaImage }}
+      <RemoteImage
+        path={product?.image}
+        fallback={
+          "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png"
+        }
         style={styles.image}
       />
 
